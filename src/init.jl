@@ -75,7 +75,9 @@ function find_backend(matplotlib::PyObject)
         # backend is already configured.  It may mean that PyPlot.jl
         # is called via PyJulia.
         backend = lowercase(matplotlib.get_backend())
-        return (backend, get(matplotlib2gui, backend, :none))
+        if !haskey(matplotlib2gui, backend)
+            return (backend, :none)
+        end
     end
 
     rcParams = PyDict(matplotlib."rcParams")
